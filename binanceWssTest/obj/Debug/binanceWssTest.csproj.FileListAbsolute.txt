@@ -1,0 +1,12 @@
+D:\Work\binanceWssTest\binanceWssTest\bin\Debug\binanceWssTest.exe.config
+D:\Work\binanceWssTest\binanceWssTest\bin\Debug\binanceWssTest.exe
+D:\Work\binanceWssTest\binanceWssTest\bin\Debug\binanceWssTest.pdb
+D:\Work\binanceWssTest\binanceWssTest\bin\Debug\Newtonsoft.Json.dll
+D:\Work\binanceWssTest\binanceWssTest\bin\Debug\websocket-sharp.dll
+D:\Work\binanceWssTest\binanceWssTest\bin\Debug\Newtonsoft.Json.xml
+D:\Work\binanceWssTest\binanceWssTest\bin\Debug\websocket-sharp.xml
+D:\Work\binanceWssTest\binanceWssTest\obj\Debug\binanceWssTest.csprojAssemblyReference.cache
+D:\Work\binanceWssTest\binanceWssTest\obj\Debug\binanceWssTest.csproj.CoreCompileInputs.cache
+D:\Work\binanceWssTest\binanceWssTest\obj\Debug\binanceWssTest.csproj.CopyComplete
+D:\Work\binanceWssTest\binanceWssTest\obj\Debug\binanceWssTest.exe
+D:\Work\binanceWssTest\binanceWssTest\obj\Debug\binanceWssTest.pdb
