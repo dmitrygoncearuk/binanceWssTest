@@ -14,18 +14,20 @@ namespace binanceWssTest
 
             Console.Write("Input markets to monitor divided by coma. Ex(ethbtc,ltceth): ");
             string[] marketNames = Console.ReadLine().Split(',');
-
             List<Connection> markets = new List<Connection>();
             List<Thread> threads = new List<Thread>();
+
             foreach (string m in marketNames)
             {
                 markets.Add(new Connection(m));
             }
+
             foreach (Connection m in markets)
             {
                 threads.Add(new Thread(new ThreadStart(m.Write)));
                 threads.Add(new Thread(new ThreadStart(m.Read)));
             }
+
             foreach (Thread t in threads)
             {
                 if (threads.IndexOf(t) % 2 == 0)
