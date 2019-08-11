@@ -11,8 +11,6 @@ namespace binanceWssTest
 
         public CircularBuffer(int capacity)
         {
-            if (capacity < 1)
-                throw new ArgumentOutOfRangeException("capacity", "must be positive");
             _buffer = new T[capacity];
             _head = capacity - 1;
         }

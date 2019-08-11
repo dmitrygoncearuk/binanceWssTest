@@ -1,43 +1,54 @@
 ﻿using System;
 using System.Threading;
-using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace binanceWssTest
 {
     class Program
     {
-        public static double ConvertToUnixTimestamp(DateTime date)
+        static void Main(string[] args)
         {
-            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            TimeSpan diff = date.ToUniversalTime() - origin;
-            return Math.Floor(diff.TotalMilliseconds);
-        }
+            long timeDelta = TimeSync.timeDelta;
+            Thread t0 = new Thread(new ThreadStart(TimeSync.UpdateTimeDelta));
+            t0.Start();
 
-        static void Main(string[] args)  //wss://stream.binance.com:9443/ws/ethbtc@aggTrade
-        {
-            ServerTime serverTime;
-            DateTime now = DateTime.Now; 
-            using (var WebClient = new System.Net.WebClient())
+            Console.Write("Input markets to monitor divided by coma. Ex(ethbtc,ltceth): ");
+            string[] marketNames = Console.ReadLine().Split(',');
+
+            List<Connection> markets = new List<Connection>();
+            List<Thread> threads = new List<Thread>();
+            foreach (string m in marketNames)
             {
-                var json = WebClient.DownloadString("https://api.binance.com/api/v1/time");
-                serverTime = JsonConvert.DeserializeObject<ServerTime>(json);
+                markets.Add(new Connection(m));
             }
-            Console.WriteLine(serverTime.serverTime);
-            Console.WriteLine(ConvertToUnixTimestamp(now));
-            Console.ReadLine();
+            foreach (Connection m in markets)
+            {
+                threads.Add(new Thread(new ThreadStart(m.Write)));
+                threads.Add(new Thread(new ThreadStart(m.Read)));
+            }
+            foreach (Thread t in threads)
+            {
+                if (threads.IndexOf(t) % 2 == 0)
+                    t.Priority = ThreadPriority.Highest;
+                else
+                    t.Priority = ThreadPriority.Lowest;
+                t.Start();
+            }
 
-            Connection con1 = new Connection("ethbtc");
-            Connection con2 = new Connection("ltcbtc");
-            Thread t1 = new Thread(new ThreadStart(con1.Read));
-            t1.Start();
-            Thread t2 = new Thread(new ThreadStart(con1.Write));
-            t2.Start();
-            Thread t3 = new Thread(new ThreadStart(con2.Read));
-            t3.Start();
-            Thread t4 = new Thread(new ThreadStart(con2.Write));
-            t4.Start();
-
-            Console.ReadKey();
+            ConsoleKeyInfo k;
+            Console.WriteLine("Press ESC to exit...");
+            while (true)
+            {
+                k = Console.ReadKey(true);
+                if (k.Key == ConsoleKey.Escape)
+                {
+                    foreach (Connection m in markets)
+                    {
+                        m.ws.Close();
+                    }
+                    Environment.Exit(1);
+                }
+            }
         }
     }
 }
